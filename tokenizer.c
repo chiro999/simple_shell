@@ -1,13 +1,13 @@
 #include "shell.h"
 
 /**
- * tokenize - tokenizes a buffer with a delimiter
+ * custom_tokenizer - tokenizes a buffer with a delimiter
  * @arguments: buffer to tokenize
  * @delimiter: delimiter to tokenize along
  *
  * Return: pointer to an array of pointers to the tokens
  */
-char **tokenize(char *arguments, char *delimiter)
+char **custom_tokenizer(char *arguments, char *delimiter)
 {
 	char **tokens = NULL;
 	size_t i = 0, count = 10;
@@ -20,7 +20,7 @@ char **tokenize(char *arguments, char *delimiter)
 		perror("Fatal Error");
 		return (NULL);
 	}
-	while ((tokens[i] = _strtok(arguments, delimiter)) != NULL)
+	while ((tokens[i] = custom_strtok(arguments, delimiter)) != NULL)
 	{
 		i++;
 		if (i == count)
