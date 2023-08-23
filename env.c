@@ -54,19 +54,24 @@ void env_plus(shell_t *shell_vars)
 	unsigned int i;
 	char **new;
 
+	/* count existing env vars */
 	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
 		;
+	/* malloc and +2 for new variable '/' */
 	new = malloc(sizeof(char *) * (i + 2));
-	if (new == NULL)
+	/* print error and set error status */
+	if (!new)
 	{
 		print_error(shell_vars, NULL);
 		shell_vars->status = 127;
 		_close(shell_vars);
 	}
+	/* copy env vars to new */
 	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
 		new[i] = shell_vars->env_vars[i];
+	/* create a new env var and store it in new */
 	new[i] = new_env(shell_vars->tokens[1], shell_vars->tokens[2]);
-	if (new[i] == NULL)
+	if (!new[i])
 	{
 		print_error(shell_vars, NULL);
 		free(shell_vars->cmd_mem);
@@ -76,6 +81,7 @@ void env_plus(shell_t *shell_vars)
 		free(new);
 		exit(127);
 	}
+	/* null terminate new env and update old env with new env */
 	new[i + 1] = NULL;
 	free(shell_vars->env_vars);
 	shell_vars->env_vars = new;
@@ -90,10 +96,10 @@ void env_plus(shell_t *shell_vars)
  */
 char **find_env(char **env, char *path)
 {
-	unsigned int i, j, len;
+	unsigned int i = 0, j, path_len;
 
-	len = _strlen(path);
-	for (i = 0; env[i] != NULL; i++)
+	path_len = _strlen(path);
+	for (; env[i] != NULL; i++)
 	{	/* compare curr_env with target env */
 		for (j = 0; j < len; j++)
 			if (path[j] != env[i][j])
