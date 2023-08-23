@@ -1,15 +1,15 @@
 #include "shell.h"
 
 /**
- * sig_handler - handles ^C signal interupt
+ * handle_signal - handles ^C signal interupt
  * @sig_handler: signal handler variable
  *
  * Return: void
  */
-void sig_handler(int sig_handler)
+void handle_signal(int handle_signal)
 {
-	(void) sig_handler;
-	_puts("\n$ ");
+	(void) handle_signal;
+	str_out("\n$ ");
 }
 
 /**
@@ -22,41 +22,41 @@ void sig_handler(int sig_handler)
  */
 int main(int argc, char **argv, char **environment)
 {
-	size_t buffer = 0;
+	size_t cmd_mem = 0;
 	unsigned int interactive = 0, i;
-	input_t inputs = {NULL, NULL, NULL, 0, NULL, 0, NULL};
+	shell_t shell_vars = {NULL, NULL, NULL, 0, NULL, NULL, 0};
 
 	UNUSED(argc);
 
 	inputs.argv = argv;
-	inputs.env = init_env(environment);
-	signal(SIGINT, sig_handler);
+	shell_vars.env_vars = init_env(environment);
+	signal(SIGINT, handle_signal);
 	if (!isatty(STDIN_FILENO))
 		interactive = 1;
 	if (interactive == 0)
-		_puts("$ ");
+		str_out("$ ");
 
-	while (getline(&(inputs.buffer), &buffer, stdin) != -1)
+	while (getline(&(shell_vars.cmd_mem), &cmd_mem, stdin) != -1)
 	{
-		inputs.count++;
-		inputs.commands = tokenize(inputs.buffer, ";");
-		for (i = 0; inputs.commands && inputs.commands[i] != NULL; i++)
+		shell_vars.tokenCount++;
+		shell_vars.commands = custom_tokenizer(shell_vars.buffer, ";");
+		for (i = 0; shell_vars.commands && shell_vars.commands[i] != NULL; i++)
 		{
-			inputs.tokens = tokenize(inputs.commands[i], "\n \t\r");
-			if (inputs.tokens && inputs.tokens[0])
-				if (_builtins(&inputs) == NULL)
-					check_path(&inputs);
-			free(inputs.tokens);
+			shell_vars.tokens = custom_tokenizer(shell_vars.commands[i], "\n \t\r");
+			if (shell_vars.tokens && shell_vars.tokens[0])
+				if (_embedded(&shell_vars) == NULL)
+					path_check(&shell_vars);
+			free(shell_vars.tokens);
 		}
-		free(inputs.buffer);
-		free(inputs.commands);
+		free(shell_vars.cmd_mem);
+		free(shell_vars.commands);
 		if (interactive == 0)
-			_puts("$ ");
-		inputs.buffer = NULL;
+			str_out("$ ");
+		shell_vars.cmd_mem = NULL;
 	}
 	if (interactive == 0)
 		_puts("\n");
-	free_environ(inputs.env);
-	free(inputs.buffer);
-	exit(inputs.status);
+	env_free(shell_vars.env_vars);
+	free(shell_vars.cmd_mem);
+	exit(shell_vars.status);
 }
