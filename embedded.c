@@ -1,42 +1,43 @@
 #include "shell.h"
 
 /**
- * _embedded - checks if the command is a builtin
- * @inputs: variables
- * Return: pointer to the function or NULL
+ * _embedded - checks if the command is an embedded function
+ * @shell_vars: variables
+ * Return: the function or NULL
  */
 void (*_embedded(shell_t *shell_vars))(shell_t *shell_vars)
 {
-	unsigned int i;
-	embedded_t check[] = {
+	unsigned int i = 0;
+	embedded_t selector[] = {
 		{"exit", _close},
 		{"env", curr_env},
 		{"setenv", _setenv},
 		{"unsetenv", _unsetenv},
 		{NULL, NULL}
 	};
-
-	for (i = 0; check[i].f != NULL; i++)
-	{
-		if (_strcmp(shell_vars->tokens[0], check[i].name) == 0)
+	
+	/* function selector, compares input command with the commands above  */
+	for (; selector[i].f != NULL; i++)
+	{	
+		if (_strcmp(shell_vars->tokens[0], selector[i].name) == 0)
 			break;
 	}
-	if (check[i].f != NULL)
-		check[i].f(shell_vars);
-	return (check[i].f);
+	if (selector[i].f)
+		selector[i].f(shell_vars);
+	return (selector[i].f);
 }
 
 
 /**
  * curr_env - prints the current environment
- * @inputs: struct of variables
+ * @shell_vars:  variables
  * Return: void.
  */
 void curr_env(shell_t *shell_vars)
 {
-	unsigned int i;
+	unsigned int i = 0;
 
-	for (i = 0; shell_vars->env_vars[i]; i++)
+	for (; shell_vars->env_vars[i]; i++)
 	{
 		str_out(shell_vars->env_vars[i]);
 		str_out("\n");
@@ -62,12 +63,12 @@ void _setenv(shell_t *shell_vars)
 		return;
 	}
 	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
-	if (env == NULL)
+	if (!env)
 		env_plus(shell_vars);
 	else
 	{
 		input = new_env(shell_vars->tokens[1], shell_vars->tokens[2]);
-		if (input == NULL)
+		if (!input)
 		{
 			print_error(shell_vars, NULL);
 			free(shell_vars->cmd_mem);
@@ -84,7 +85,7 @@ void _setenv(shell_t *shell_vars)
 
 /**
  * _unsetenv - remove an environment variable
- * @inputs: pointer to a struct of variables
+ * @shell_vars:  struct of variables
  *
  * Return: void
  */
@@ -92,7 +93,8 @@ void _unsetenv(shell_t *shell_vars)
 {
 	char **env, **new;
 
-	unsigned int i, j;
+	unsigned int i = 0;
+        unsigned int j;
 
 	if (shell_vars->tokens[1] == NULL)
 	{
@@ -101,12 +103,12 @@ void _unsetenv(shell_t *shell_vars)
 		return;
 	}
 	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
-	if (env == NULL)
+	if (!env)
 	{
 		print_error(shell_vars, ": No variable to unset");
 		return;
 	}
-	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
+	for (; shell_vars->env_vars[i] != NULL; i++)
 		;
 	new = malloc(sizeof(char *) * i);
 	if (new == NULL)
