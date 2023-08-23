@@ -30,7 +30,7 @@ typedef struct shell_vars
     size_t tokenCount;
     char **argv;
     char **commands;
-    int close_status;
+    int status;
 } shell_t;
 
 /**
