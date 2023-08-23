@@ -7,7 +7,7 @@
  *
  * Return: void
  */
-void print_error(shell_t *shell_vars, char *err_message)
+void pint_error(shell_t *shell_vars, char *err_message)
 {
 	char *tokenCount;
 
