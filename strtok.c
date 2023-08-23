@@ -1,13 +1,13 @@
 #include "shell.h"
 
 /**
- * matching - checks if a character matches any in a string
+ * is_a_match - checks if a character matches any in a string
  * @c: character to check
  * @str: string to check
  *
  * Return: 1 if match, 0 if not
  */
-unsigned int matching(char c, const char *str)
+unsigned int is_a_match(char c, const char *str)
 {
 	unsigned int i;
 
@@ -20,13 +20,13 @@ unsigned int matching(char c, const char *str)
 }
 
 /**
- * _strtok - custom strtok
+ * custom_strtok - custom strtok
  * @str: string to tokenize
  * @delim: delimiter to tokenize against
  *
  * Return: pointer to the next token or NULL
  */
-char *_strtok(char *str, const char *delim)
+char *custom_strtok(char *str, const char *delim)
 {
 	static char *token;
 	static char *next;
