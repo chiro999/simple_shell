@@ -7,7 +7,7 @@
  *
  * Return: 0 on succcess, 1 on failure
  */
-int _execute(char *command, shell_t *shell_vars)
+int _exeute(char *command, shell_t *shell_vars)
 {
 	pid_t child;
 
