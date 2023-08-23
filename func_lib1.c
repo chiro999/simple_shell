@@ -101,12 +101,12 @@ char *_strdup(char *duplicate)
 }
 
 /**
- * _puts - writes a string to standard output
+ * str_out - writes a string to standard output
  * @s: string to write
  *
  * Return: number of chars printed or -1 on failure
  */
-ssize_t _puts(char *s)
+ssize_t str_out(char *s)
 {
 	ssize_t num, len;
 

@@ -1,12 +1,12 @@
 #include "shell.h"
 
 /**
- * _printer - prints a string to standard error
+ * str_error - prints a string to standard error
  * @str: string to print
  *
  * Return: void
  */
-void _printer(char *str)
+void str_error(char *str)
 {
 	ssize_t num, len;
 
@@ -22,12 +22,12 @@ void _printer(char *str)
 
 
 /**
- * _int_str - converts an unsigned int to a string
+ * int_to_str - converts an unsigned int to a string
  * @count: unsigned int to convert
  *
  * Return: pointer to the converted string
  */
-char *_int_str(unsigned int count)
+char *int_to_str(unsigned int count)
 {
 	char *str;
 	unsigned int temp, digit;
