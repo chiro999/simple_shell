@@ -94,6 +94,6 @@ void print_error(shell_t *shell_vars, char *err_message);
 
 /* main functions */
 void handle_signal(int handle_signal);
-int main(int argc, char **arg_arr, char **e_vars);
+int main(int argc, char **argv, char **environment);
 
 #endif
