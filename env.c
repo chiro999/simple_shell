@@ -1,41 +1,44 @@
 #include "shell.h"
 
 /**
- * env_copy - make the shell environment from the environment passed to main
- * @environ: environment passed to main
+ * env_copy - create shell env from the env passed to main
+ * @environ: env passed to main
  *
- * Return: pointer to the new environment
+ * Return: new environment
  */
 char **env_copy(char **environ)
 {
 	char **new = NULL;
 	size_t i;
-
+	/* number of env variables */
 	for (i = 0; environ[i] != NULL; i++)
 		;
+	/* allocate memory + 1 for null terminator */
 	new = malloc(sizeof(char *) * (i + 1));
 	if (new == NULL)
 	{
 		perror("Fatal Error");
 		exit(1);
 	}
+	/* replicate the env variables and store in new environment */
 	for (i = 0; environ[i] != NULL; i++)
 		new[i] = _strdup(environ[i]);
 	new[i] = NULL;
+	/* new environment */
 	return (new);
 }
 
 /**
- * env_free - free the shell's environment
- * @environ: shell's environment
+ * env_free - free shell env
+ * @environ: shell env
  *
  * Return: void
  */
 void env_free(char **environ)
 {
-	unsigned int i;
+	unsigned int i = 0;
 
-	for (i = 0; environ[i] != NULL; i++)
+	for (; environ[i] != NULL; i++)
 		free(environ[i]);
 	free(environ);
 }
@@ -79,9 +82,9 @@ void env_plus(shell_t *shell_vars)
 }
 
 /**
- * find_env - finds an environment variable
- * @env: array of environment variables
- * @path: environment variable to find
+ * find_env - finds an env variable
+ * @env: array of env variables
+ * @path: specific env variable
  *
  * Return: pointer to address of the environment variable
  */
@@ -91,13 +94,16 @@ char **find_env(char **env, char *path)
 
 	len = _strlen(path);
 	for (i = 0; env[i] != NULL; i++)
-	{
+	{	/* compare curr_env with target env */
 		for (j = 0; j < len; j++)
 			if (path[j] != env[i][j])
 				break;
+		/* if they match in length and the next char after name is '=' */
 		if (j == len && env[i][j] == '=')
+			/* return env variable */
 			return (&env[i]);
 	}
+	/* null env var if not found */
 	return (NULL);
 }
 
@@ -110,14 +116,15 @@ char **find_env(char **env, char *path)
  */
 char *new_env(char *key, char *value)
 {
-	unsigned int len1, len2, i, j;
+	unsigned int key_len, val_len, i, j;
 	char *new;
 
 
-	len1 = _strlen(key);
-	len2 = _strlen(value);
-	new = malloc(sizeof(char) * (len1 + len2 + 2));
-	if (new == NULL)
+	key_len = _strlen(key);
+	val_len = _strlen(value);
+	/* +2 for '=' and '/' */
+	new = malloc(sizeof(char) * (key_len + val_len + 2));
+	if (!new)
 		return (NULL);
 	for (i = 0; key[i] != '\0'; i++)
 		new[i] = key[i];
