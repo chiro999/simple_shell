@@ -1,33 +1,33 @@
 #include "shell.h"
 
 /**
- * _exit_ - Exit program
- * @inputs: variables
+ * _close - Exit program
+ * @shell_vars: variables
  * Return: void
  */
-void _exit_(input_t *inputs)
+void _close(shell_t *shell_vars)
 {
 	int status;
 
-	if (_strncmp(inputs->tokens[0], "exit") == 0 &&
-	    inputs->tokens[1] != NULL)
+	if (_strncmp(shell_vars->tokens[0], "exit") == 0 &&
+	    shell_vars->tokens[1] != NULL)
 	{
-		status = _atoi(inputs->tokens[1]);
+		status = _atoi(shell_vars->tokens[1]);
 		if (status == -1)
 		{
-			inputs->status = 2;
-			_error(inputs, ": Illegal number: ");
-			_printer(inputs->tokens[1]);
-			_printer("\n");
-			free(inputs->commands);
-			inputs->commands = NULL;
+			shell_vars->status = 2;
+			print_error(inputs, ": Illegal number: ");
+			str_error(inputs->tokens[1]);
+			str_error("\n");
+			free(shell-vars->commands);
+			shell_vars->commands = NULL;
 			return;
 		}
-		inputs->status = status;
+		shell_vars->status = status;
 	}
-	free(inputs->buffer);
-	free(inputs->tokens);
-	free(inputs->commands);
-	free_environ(inputs->env);
-	exit(inputs->status);
+	free(shell_vars->cmd_mem);
+	free(shell_vars->tokens);
+	free(shell_vars->commands);
+	env_free(shell_vars->env_vars);
+	exit(shell_vars->status);
 }
