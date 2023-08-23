@@ -63,15 +63,15 @@ char **custom_tokenizer(char *inputBuffer, char *delimiter);
 
 /* embedded functions */
 void curr_env(shell_t *shell_vars);
-void create_edit_env(shell_t *shell_vars);
-void rm_env(shell_t *shell_vars);
-void (*embedded(shell_t *shell_vars))(shell_t *shell_vars);
+void _setenv(shell_t *shell_vars);
+void _unsetenv(shell_t *shell_vars);
+void (*_embedded(shell_t *shell_vars))(shell_t *shell_vars);
 
 /* environment functions */
-char **is_env(char **env_var, char *path);
+char **find_env(char **env, char *path);
 void env_free(char **environ);
 char **env_copy(char **environ);
-char *new_env(char *name, char *value);
+char *new_env(char *key, char *value);
 void env_plus(shell_t *shell_vars);
 
 /* stdlib replacements */
