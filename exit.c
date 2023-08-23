@@ -9,7 +9,7 @@ void _close(shell_t *shell_vars)
 {
 	int status;
 
-	if (_strncmp(shell_vars->tokens[0], "exit") == 0 &&
+	if (_strcmp(shell_vars->tokens[0], "exit") == 0 &&
 	    shell_vars->tokens[1] != NULL)
 	{
 		status = _atoi(shell_vars->tokens[1]);
