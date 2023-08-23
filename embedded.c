@@ -1,16 +1,16 @@
 #include "shell.h"
 
 /**
- * _builtins - checks if the command is a builtin
+ * _embedded - checks if the command is a builtin
  * @inputs: variables
  * Return: pointer to the function or NULL
  */
-void (*_builtins(input_t *inputs))(input_t *inputs)
+void (*_embedded(shell_t *shell_vars))(shell_t *shell_vars)
 {
 	unsigned int i;
-	builtins_t check[] = {
-		{"exit", _exit_},
-		{"env", _env},
+	embedded_t check[] = {
+		{"exit", _close},
+		{"env", curr_env},
 		{"setenv", _setenv},
 		{"unsetenv", _unsetenv},
 		{NULL, NULL}
@@ -22,26 +22,26 @@ void (*_builtins(input_t *inputs))(input_t *inputs)
 			break;
 	}
 	if (check[i].f != NULL)
-		check[i].f(inputs);
+		check[i].f(shell_vars);
 	return (check[i].f);
 }
 
 
 /**
- * _env - prints the current environment
+ * curr_env - prints the current environment
  * @inputs: struct of variables
  * Return: void.
  */
-void _env(input_t *inputs)
+void curr_env(shell_t *shell_vars)
 {
 	unsigned int i;
 
-	for (i = 0; inputs->env[i]; i++)
+	for (i = 0; shell_vars->env_vars[i]; i++)
 	{
-		_puts(inputs->env[i]);
-		_puts("\n");
+		str_out(shell_vars->env_vars[i]);
+		str_out("\n");
 	}
-	inputs->status = 0;
+	shell_vars->status = 0;
 }
 
 /**
@@ -50,36 +50,36 @@ void _env(input_t *inputs)
  *
  * Return: void
  */
-void _setenv(input_t *inputs)
+void _setenv(shell_t *shell_vars)
 {
 	char **env;
 	char *input;
 
-	if (inputs->tokens[1] == NULL || inputs->tokens[2] == NULL)
+	if (shell_vars->tokens[1] == NULL || shell_vars->tokens[2] == NULL)
 	{
-		_error(inputs, ": Incorrect number of arguments\n");
-		inputs->status = 2;
+		print_error(shell_vars, ": Incorrect number of arguments\n");
+		shell_vars->status = 2;
 		return;
 	}
-	env = find_env(inputs->env, inputs->tokens[1]);
+	env = env_plus(shell_vars->env_vars, shell_vars->tokens[1]);
 	if (env == NULL)
-		add_env(inputs);
+		env_plus(inputs);
 	else
 	{
 		input = add_value(inputs->tokens[1], inputs->tokens[2]);
 		if (input == NULL)
 		{
-			_error(inputs, NULL);
-			free(inputs->buffer);
-			free(inputs->commands);
-			free(inputs->tokens);
-			free_environ(inputs->env);
+			print_error(shell_vars, NULL);
+			free(shell_vars->cmd_mem);
+			free(shell_vars->commands);
+			free(shell_vars->tokens);
+			env_free(shell_vars->env_vars);
 			exit(127);
 		}
 		free(*env);
 		*env = input;
 	}
-	inputs->status = 0;
+	shell_vars->status = 0;
 }
 
 /**
@@ -88,40 +88,40 @@ void _setenv(input_t *inputs)
  *
  * Return: void
  */
-void _unsetenv(input_t *inputs)
+void _unsetenv(shell_t *shell)
 {
 	char **env, **new;
 
 	unsigned int i, j;
 
-	if (inputs->tokens[1] == NULL)
+	if (shell_vars-tokens[1] == NULL)
 	{
-		_error(inputs, ": Incorrect number of arguments\n");
-		inputs->status = 2;
+		print_error(shell_vars, ": Incorrect number of arguments\n");
+		shell_vars->status = 2;
 		return;
 	}
-	env = find_env(inputs->env, inputs->tokens[1]);
+	env = is_env(shell_vars->env_vars, shell_vars->tokens[1]);
 	if (env == NULL)
 	{
-		_error(inputs, ": No variable to unset");
+		print_error(shell_vars, ": No variable to unset");
 		return;
 	}
-	for (i = 0; inputs->env[i] != NULL; i++)
+	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
 		;
 	new = malloc(sizeof(char *) * i);
 	if (new == NULL)
 	{
-		_error(inputs, NULL);
-		inputs->status = 127;
-		_exit_(inputs);
+		print_error(shell_vars, NULL);
+		shell_vars->status = 127;
+		_close(shell_vars);
 	}
-	for (i = 0; inputs->env[i] != *env; i++)
-		new[i] = inputs->env[i];
-	for (j = i + 1; inputs->env[j] != NULL; j++, i++)
-		new[i] = inputs->env[j];
+	for (i = 0; shell_vars->env_vars[i] != *env; i++)
+		new[i] = shell_vars->env_vars[i];
+	for (j = i + 1; shell_vars->env_vars[j] != NULL; j++, i++)
+		new[i] = shell_vars->env_vars[j];
 	new[i] = NULL;
 	free(*env);
-	free(inputs->env);
-	inputs->env = new;
-	inputs->status = 0;
+	free(shell_vars->env_vars);
+	shell_vars->env = new;
+	shell_vars->status = 0;
 }

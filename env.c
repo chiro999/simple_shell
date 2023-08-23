@@ -1,12 +1,12 @@
 #include "shell.h"
 
 /**
- * init_env - make the shell environment from the environment passed to main
+ * env_copy - make the shell environment from the environment passed to main
  * @environ: environment passed to main
  *
  * Return: pointer to the new environment
  */
-char **init_env(char **environ)
+char **env_copy(char **environ)
 {
 	char **new = NULL;
 	size_t i;
@@ -26,7 +26,7 @@ char **init_env(char **environ)
 }
 
 /**
- * free_environ - free the shell's environment
+ * env_free - free the shell's environment
  * @environ: shell's environment
  *
  * Return: void
@@ -41,41 +41,41 @@ void free_environ(char **environ)
 }
 
 /**
- * add_env - create a new environment variable
- * @inputs: pointer to struct of variables
+ * env_plus - create a new environment variable
+ * @shell_vars: pointer to struct of variables
  *
  * Return: void
  */
-void add_env(input_t *inputs)
+void env_plus(shell_t *shell_vars)
 {
 	unsigned int i;
 	char **new;
 
-	for (i = 0; inputs->env[i] != NULL; i++)
+	for (i = 0; shell_t->env_vars[i] != NULL; i++)
 		;
 	new = malloc(sizeof(char *) * (i + 2));
 	if (new == NULL)
 	{
-		_error(inputs, NULL);
-		inputs->status = 127;
-		_exit_(inputs);
+		print_error(shell_vars, NULL);
+		shell_vars->status = 127;
+		_close(shell_vars);
 	}
-	for (i = 0; inputs->env[i] != NULL; i++)
-		new[i] = inputs->env[i];
-	new[i] = add_value(inputs->tokens[1], inputs->tokens[2]);
+	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
+		new[i] = shell_vars->env_vars[i];
+	new[i] = new_env(shell_vars->tokens[1], shell_vars->tokens[2]);
 	if (new[i] == NULL)
 	{
-		_error(inputs, NULL);
-		free(inputs->buffer);
-		free(inputs->commands);
-		free(inputs->tokens);
-		free_environ(inputs->env);
+		print_error(shell_vars, NULL);
+		free(shell_vars->cmd_mem);
+		free(shell_vars->commands);
+		free(shell_vars->tokens);
+		env_free(shell_vars->env_vars);
 		free(new);
 		exit(127);
 	}
 	new[i + 1] = NULL;
-	free(inputs->env);
-	inputs->env = new;
+	free(shell_vars->env_vars);
+	shell_vars->env_vars = new;
 }
 
 /**
@@ -102,13 +102,13 @@ char **find_env(char **env, char *path)
 }
 
 /**
- * add_value - create a new environment variable string
+ * new_env - create a new environment variable string
  * @key: variable name
  * @value: variable value
  *
  * Return: pointer to the new string;
  */
-char *add_value(char *key, char *value)
+char *new_env(char *key, char *value)
 {
 	unsigned int len1, len2, i, j;
 	char *new;
