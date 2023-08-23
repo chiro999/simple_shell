@@ -6,7 +6,7 @@
  *
  * Return: void
  */
-void hndle_signal(int handle_signal)
+void handle_signal(int handle_signal)
 {
 	(void) handle_signal;
 	str_out("\n$ ");
