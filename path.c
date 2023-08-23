@@ -138,7 +138,7 @@ int exec_curr_dir(shell_t *shell_vars)
 			else
 			{
 				wait(&shell_vars->status);
-				if (WIFEXITED(shell-vars->status))
+				if (WIFEXITED(shell_vars->status))
 					shell_vars->status = WEXITSTATUS(shell_vars->status);
 				else if (WIFSIGNALED(shell_vars->status) && WTERMSIG(shell_vars->status) == SIGINT)
 					shell_vars->status = 130;

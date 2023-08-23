@@ -25,7 +25,7 @@ char **custom_tokenizer(char *arguments, char *delimiter)
 		i++;
 		if (i == count)
 		{
-			tokens = _realloc(tokens, &count);
+			tokens = more_mem(tokens, &count);
 			if (tokens == NULL)
 			{
 				perror("Fatal Error");

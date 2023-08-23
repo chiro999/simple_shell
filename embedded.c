@@ -18,7 +18,7 @@ void (*_embedded(shell_t *shell_vars))(shell_t *shell_vars)
 
 	for (i = 0; check[i].f != NULL; i++)
 	{
-		if (_strncmp(inputs->tokens[0], check[i].name) == 0)
+		if (_strcmp(shell_vars->tokens[0], check[i].name) == 0)
 			break;
 	}
 	if (check[i].f != NULL)
@@ -61,12 +61,12 @@ void _setenv(shell_t *shell_vars)
 		shell_vars->status = 2;
 		return;
 	}
-	env = env_plus(shell_vars->env_vars, shell_vars->tokens[1]);
+	env = new_env(shell_vars->env_vars, shell_vars->tokens[1]);
 	if (env == NULL)
-		env_plus(inputs);
+		new_env(shell_vars);
 	else
 	{
-		input = add_value(inputs->tokens[1], inputs->tokens[2]);
+		input = new_env(inputs->tokens[1], inputs->tokens[2]);
 		if (input == NULL)
 		{
 			print_error(shell_vars, NULL);
@@ -94,7 +94,7 @@ void _unsetenv(shell_t *shell)
 
 	unsigned int i, j;
 
-	if (shell_vars-tokens[1] == NULL)
+	if (shell_vars->tokens[1] == NULL)
 	{
 		print_error(shell_vars, ": Incorrect number of arguments\n");
 		shell_vars->status = 2;

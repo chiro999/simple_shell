@@ -39,7 +39,7 @@ char *custom_strtok(char *str, const char *delim)
 		return (NULL);
 	for (i = 0; next[i] != '\0'; i++)
 	{
-		if (matching(next[i], delim) == 0)
+		if (is_a_match(next[i], delim) == 0)
 			break;
 	}
 	if (next[i] == '\0' || next[i] == '#')
@@ -51,7 +51,7 @@ char *custom_strtok(char *str, const char *delim)
 	next = token;
 	for (i = 0; next[i] != '\0'; i++)
 	{
-		if (matching(next[i], delim) == 1)
+		if (is_a_match(next[i], delim) == 1)
 			break;
 	}
 	if (next[i] == '\0')

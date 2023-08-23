@@ -16,8 +16,8 @@ void _close(shell_t *shell_vars)
 		if (status == -1)
 		{
 			shell_vars->status = 2;
-			print_error(inputs, ": Illegal number: ");
-			str_error(inputs->tokens[1]);
+			print_error(shell_vars, ": Illegal number: ");
+			str_error(ishell_vars->tokens[1]);
 			str_error("\n");
 			free(shell-vars->commands);
 			shell_vars->commands = NULL;
