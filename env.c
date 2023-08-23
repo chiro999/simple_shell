@@ -31,7 +31,7 @@ char **env_copy(char **environ)
  *
  * Return: void
  */
-void free_environ(char **environ)
+void env_free(char **environ)
 {
 	unsigned int i;
 

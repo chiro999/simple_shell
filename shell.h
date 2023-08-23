@@ -69,7 +69,7 @@ void (*embedded(shell_t *shell_vars))(shell_t *shell_vars);
 
 /* environment functions */
 char **is_env(char **env_var, char *path);
-void env_free(char **env);
+void env_free(char **environ);
 char **env_copy(char **environ);
 char *new_env(char *name, char *value);
 void env_plus(shell_t *shell_vars);
