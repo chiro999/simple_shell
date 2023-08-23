@@ -61,12 +61,12 @@ void _setenv(shell_t *shell_vars)
 		shell_vars->status = 2;
 		return;
 	}
-	env = new_env(shell_vars->env_vars, shell_vars->tokens[1]);
+	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
 	if (env == NULL)
-		new_env(shell_vars);
+		env_plus(shell_vars);
 	else
 	{
-		input = new_env(inputs->tokens[1], inputs->tokens[2]);
+		input = new_env(shell_vars->tokens[1], shell_vars->tokens[2]);
 		if (input == NULL)
 		{
 			print_error(shell_vars, NULL);
@@ -88,7 +88,7 @@ void _setenv(shell_t *shell_vars)
  *
  * Return: void
  */
-void _unsetenv(shell_t *shell)
+void _unsetenv(shell_t *shell_vars)
 {
 	char **env, **new;
 
@@ -100,7 +100,7 @@ void _unsetenv(shell_t *shell)
 		shell_vars->status = 2;
 		return;
 	}
-	env = is_env(shell_vars->env_vars, shell_vars->tokens[1]);
+	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
 	if (env == NULL)
 	{
 		print_error(shell_vars, ": No variable to unset");

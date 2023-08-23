@@ -63,7 +63,7 @@ unsigned int _strlen(char *s)
  * @s2: second string, of two, to be compared
  * Return: 0 on success, anything else is a failure
  */
-int _strncmp(char *s1, char *s2)
+int _strcmp(char *s1, char *s2)
 {
 	int i;
 

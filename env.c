@@ -51,7 +51,7 @@ void env_plus(shell_t *shell_vars)
 	unsigned int i;
 	char **new;
 
-	for (i = 0; shell_t->env_vars[i] != NULL; i++)
+	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
 		;
 	new = malloc(sizeof(char *) * (i + 2));
 	if (new == NULL)

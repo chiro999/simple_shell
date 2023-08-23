@@ -19,7 +19,7 @@ void _close(shell_t *shell_vars)
 			print_error(shell_vars, ": Illegal number: ");
 			str_error(shell_vars->tokens[1]);
 			str_error("\n");
-			free(shell->vars->commands);
+			free(shell_vars->commands);
 			shell_vars->commands = NULL;
 			return;
 		}

@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 /**
  * str_error - prints a string to standard error
  * @str: string to print
@@ -27,7 +28,7 @@ void str_error(char *str)
  *
  * Return: pointer to the converted string
  */
-char *int_to_str(unsigned int count)
+char *int_to_string(unsigned int count)
 {
 	char *str;
 	unsigned int temp, digit;

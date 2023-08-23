@@ -28,7 +28,7 @@ int main(int argc, char **argv, char **environment)
 
 	UNUSED(argc);
 
-	inputs.argv = argv;
+	shell_vars.argv = argv;
 	shell_vars.env_vars = env_copy(environment);
 	signal(SIGINT, handle_signal);
 	if (!isatty(STDIN_FILENO))
@@ -39,7 +39,7 @@ int main(int argc, char **argv, char **environment)
 	while (getline(&(shell_vars.cmd_mem), &cmd_mem, stdin) != -1)
 	{
 		shell_vars.tokenCount++;
-		shell_vars.commands = custom_tokenizer(shell_vars.buffer, ";");
+		shell_vars.commands = custom_tokenizer(shell_vars.cmd_mem, ";");
 		for (i = 0; shell_vars.commands && shell_vars.commands[i] != NULL; i++)
 		{
 			shell_vars.tokens = custom_tokenizer(shell_vars.commands[i], "\n \t\r");
