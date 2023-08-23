@@ -122,6 +122,6 @@ void _unsetenv(shell_t *shell)
 	new[i] = NULL;
 	free(*env);
 	free(shell_vars->env_vars);
-	shell_vars->env = new;
+	shell_vars->env_vars = new;
 	shell_vars->status = 0;
 }
