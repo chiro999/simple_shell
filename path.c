@@ -27,7 +27,7 @@ int _execute(char *command, shell_t *shell_vars)
 			if (WIFEXITED(shell_vars->status))
 				shell_vars->status = WEXITSTATUS(shell_vars->status);
 			else if (WIFSIGNALED(shell_vars->status) && WTERMSIG(shell_vars->status) == SIGINT)
-				shell_varss->status = 130;
+				shell_vars->status = 130;
 			return (0);
 		}
 		shell_vars->status = 127;
@@ -70,21 +70,21 @@ char *str_path(char **env_arr)
  *
  * Return: void
  */
-void path_check(input_t *inputs)
+void path_check(shell_t *shell_vars)
 {
 	char *path, *dup = NULL, *check = NULL;
 	unsigned int i = 0, r = 0;
 	char **path_tokens;
 
-	if (check_dir(shell_vars->tokens[0]))
-		r = exec_cwd(shell_vars);
+	if (is_PATH(shell_vars->tokens[0]))
+		r = exec_curr_dir(shell_vars);
 	else
 	{
-		path = find_path(shell_vars->env_vars);
+		path = str_path(shell_vars->env_vars);
 		if (path != NULL)
 		{
 			dup = _strdup(path + 5);
-			path_tokens = tokenize(dup, ":");
+			path_tokens = custom_tokenizer(dup, ":");
 			for (i = 0; path_tokens && path_tokens[i]; i++, free(check))
 			{
 				check = _strcat(path_tokens[i], shell_vars->tokens[0]);
@@ -132,7 +132,7 @@ int exec_curr_dir(shell_t *shell_vars)
 				print_error(shell_vars, NULL);
 			if (child == 0)
 			{
-				if (execve(shell_vars->tokens[0], shell_vars->tokens, shell->env_vars) == -1)
+				if (execve(shell_vars->tokens[0], shell_vars->tokens, shell_vars->env_vars) == -1)
 					print_error(shell_vars, NULL);
 			}
 			else

@@ -29,7 +29,7 @@ int main(int argc, char **argv, char **environment)
 	UNUSED(argc);
 
 	inputs.argv = argv;
-	shell_vars.env_vars = init_env(environment);
+	shell_vars.env_vars = env_copy(environment);
 	signal(SIGINT, handle_signal);
 	if (!isatty(STDIN_FILENO))
 		interactive = 1;
@@ -55,7 +55,7 @@ int main(int argc, char **argv, char **environment)
 		shell_vars.cmd_mem = NULL;
 	}
 	if (interactive == 0)
-		_puts("\n");
+		str_out("\n");
 	env_free(shell_vars.env_vars);
 	free(shell_vars.cmd_mem);
 	exit(shell_vars.status);
