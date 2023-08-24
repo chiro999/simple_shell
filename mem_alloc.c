@@ -14,7 +14,7 @@ char **more_mem(char **old_arr, size_t *n)
 
 	/* new array with increased memory */
 	new_arr = malloc(sizeof(char *) * ((*n) + 10));
-	if (new_arr == NULL)
+	if (!new_arr)
 	{
 		free(old_arr);
 		return (NULL);
