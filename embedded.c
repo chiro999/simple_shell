@@ -55,19 +55,24 @@ void _setenv(shell_t *shell_vars)
 {
 	char **env;
 	char *input;
-
-	if (shell_vars->tokens[1] == NULL || shell_vars->tokens[2] == NULL)
+	
+	/* correct number of args */
+	if (!(shell_vars->tokens[1]) || !(shell_vars->tokens[2]))
 	{
 		print_error(shell_vars, ": Incorrect number of arguments\n");
 		shell_vars->status = 2;
 		return;
 	}
+	/* find the correct env var */
 	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
+	/* add it if it does not exist */
 	if (!env)
 		env_plus(shell_vars);
 	else
 	{
+		/* create new env var string */
 		input = new_env(shell_vars->tokens[1], shell_vars->tokens[2]);
+		/* exit program if unsuccessful */
 		if (!input)
 		{
 			print_error(shell_vars, NULL);
@@ -95,23 +100,28 @@ void _unsetenv(shell_t *shell_vars)
 
 	unsigned int i = 0;
         unsigned int j;
-
+	/* coorect number of args? */
 	if (!(shell_vars->tokens[1]))
 	{
 		print_error(shell_vars, ": Incorrect number of arguments\n");
 		shell_vars->status = 2;
 		return;
 	}
+	/* find environment variable */
 	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
+	/* print error if env var is not found */
 	if (!env)
 	{
 		print_error(shell_vars, ": No variable to unset");
 		return;
 	}
+	/* count env_vars */
 	for (; shell_vars->env_vars[i] != NULL; i++)
 		;
+	/* allocate memory the size of the env_vars */
 	new = malloc(sizeof(char *) * i);
-	if (new == NULL)
+	/* close program if malloc fails */
+	if (!new)
 	{
 		print_error(shell_vars, NULL);
 		shell_vars->status = 127;
