@@ -15,19 +15,25 @@ char **custom_tokenizer(char *arguments, char *delimiter)
 
 	if (!arguments)
 		return (NULL);
+	/* malloc for tokens */
 	tokens = malloc(sizeof(char *) * count);
-	if (tokens == NULL)
+	/* malloc failure */
+	if (!tokens)
 	{
 		perror("Fatal Error");
 		return (NULL);
 	}
+	/* tokenize using custom_strtok */
 	while ((tokens[i] = custom_strtok(arguments, delimiter)) != NULL)
 	{
 		i++;
+		/* if token has matched the size of the array */
 		if (i == count)
-		{
+		{	
+			/* malloc using the more_mem function */
 			tokens = more_mem(tokens, &count);
-			if (tokens == NULL)
+			/* malloc failure */
+			if (!tokens)
 			{
 				perror("Fatal Error");
 				return (NULL);
