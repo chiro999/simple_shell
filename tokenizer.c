@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * custom_tokenizer - tokenizes a buffer with a delimiter
+ * custom_tokenizer - tokenizes args with a delimiter
  * @args: args to be tokenized
  * @delim: char to be used as delimiter
  *
@@ -24,7 +24,7 @@ char **custom_tokenizer(char *args, char *delim)
 		return (NULL);
 	}
 	/* tokenize using custom_strtok */
-	while ((tokens[i] = custom_strtok(args, delim)) != NULL)
+	while ((tokens[i] = custom_strtok(args, delim)))
 	{
 		i++;
 		/* if token has matched the size of the array */
