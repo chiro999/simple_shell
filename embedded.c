@@ -46,8 +46,8 @@ void curr_env(shell_t *shell_vars)
 }
 
 /**
- * _setenv - create a new environment variable, or edit an existing variable
- * @inputs: pointer to struct of variables
+ * _setenv - create or environment variables
+ * @shell_vars: struct of variables
  *
  * Return: void
  */
@@ -84,7 +84,7 @@ void _setenv(shell_t *shell_vars)
 }
 
 /**
- * _unsetenv - remove an environment variable
+ * _unsetenv - removes an environment variable
  * @shell_vars:  struct of variables
  *
  * Return: void
@@ -96,7 +96,7 @@ void _unsetenv(shell_t *shell_vars)
 	unsigned int i = 0;
         unsigned int j;
 
-	if (shell_vars->tokens[1] == NULL)
+	if (!(shell_vars->tokens[1]))
 	{
 		print_error(shell_vars, ": Incorrect number of arguments\n");
 		shell_vars->status = 2;
