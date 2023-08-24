@@ -53,7 +53,7 @@ void curr_env(shell_t *shell_vars)
  */
 void _setenv(shell_t *shell_vars)
 {
-	char **env;
+	char **envvar;
 	char *input;
 	
 	/* correct number of args */
@@ -64,9 +64,9 @@ void _setenv(shell_t *shell_vars)
 		return;
 	}
 	/* find the correct env var */
-	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
+	envvar = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
 	/* add it if it does not exist */
-	if (!env)
+	if (!envvar)
 		env_plus(shell_vars);
 	else
 	{
@@ -82,8 +82,8 @@ void _setenv(shell_t *shell_vars)
 			env_free(shell_vars->env_vars);
 			exit(127);
 		}
-		free(*env);
-		*env = input;
+		free(*envvar);
+		*envvar = input;
 	}
 	shell_vars->status = 0;
 }
