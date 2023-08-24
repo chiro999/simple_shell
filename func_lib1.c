@@ -113,7 +113,7 @@ ssize_t str_out(char *string)
 	ssize_t str_len;
        	ssize_t	output;
 
-	str_len = _strlen(s);
+	str_len = _strlen(string);
 	output = write(STDOUT_FILENO, string, str_len);
 	if (output != str_out)
 	{

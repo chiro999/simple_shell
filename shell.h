@@ -79,9 +79,9 @@ char *_strcat(char *dest, char *src);
 int _strcmp(char *s1, char *s2);
 int _atoi(char *s);
 
-ssize_t str_out(char *str);
+ssize_t str_out(char *string);
 unsigned int _strlen(char *s);
-void str_error(char *str);
+void str_error(char *string);
 
 char *_strdup(char *replica);
 char *int_to_string(unsigned int count);
