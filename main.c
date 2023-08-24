@@ -44,7 +44,7 @@ int main(int argc, char **argv, char **environment)
 
 	/* check if the shell is running in interactive mode */
 	if (!isatty(STDIN_FILENO))
-		interactive = 1;
+		interactive_mode = 1;
 	/* print "$" if not in interactive mode */
 	if (interactive == 0)
 		str_out("$ ");
@@ -78,7 +78,7 @@ int main(int argc, char **argv, char **environment)
 	}
 
 	/* print newline if not in interactive mode */
-	if (interactive == 0)
+	if (interactive_mode == 0)
 		str_out("\n");
 
 	/* mem free and exit shell*/
