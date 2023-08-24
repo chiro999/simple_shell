@@ -101,7 +101,7 @@ char **find_env(char **env, char *path)
 	path_len = _strlen(path);
 	for (; env[i] != NULL; i++)
 	{	/* compare curr_env with target env */
-		for (j = 0; j < len; j++)
+		for (j = 0; j < path_len; j++)
 			if (path[j] != env[i][j])
 				break;
 		/* if they match in length and the next char after name is '=' */
