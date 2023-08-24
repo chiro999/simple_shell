@@ -15,7 +15,7 @@ char **env_copy(char **environ)
 		;
 	/* allocate memory + 1 for null terminator */
 	new = malloc(sizeof(char *) * (i + 1));
-	if (new == NULL)
+	if (!new)
 	{
 		perror("Fatal Error");
 		exit(1);
