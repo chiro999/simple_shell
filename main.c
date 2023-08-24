@@ -14,9 +14,9 @@ void handle_signal(int handle_signal)
 
 /**
  * main - main function for the shell
- * @argc: number of arguments passed to main
- * @argv: array of arguments passed to main
- * @environment: array of environment variables
+ * @argc: count of arguments passed to main
+ * @argv_arr: arguments passed to main
+ * @env_arr: environment variables
  *
  * Return: 0 or exit status, or ?
  */
