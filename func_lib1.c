@@ -8,60 +8,61 @@
  */
 char *_strcat(char *dest, char *src)
 {
-	char *new;
-	unsigned int len1, len2, len, i, j;
+	char *new_string;
+	unsigned int l1, l2, combined_len, i, j;
 
-	len1 = 0;
-	len2 = 0;
-	if (dest == NULL)
-		len1 = 0;
+	l1 = 0;
+	l2 = 0;
+	if (!dest)
+		l1 = 0;
 	else
 	{
-		for (len1 = 0; dest[len1]; len1++)
+		for (l1 = 0; dest[l1]; l1++)
 			;
 	}
-	if (src == NULL)
-		len2 = 0;
+	if (!src)
+		l2 = 0;
 	else
 	{
-		for (len2 = 0; src[len2]; len2++)
+		for (l2 = 0; src[l2]; l2++)
 			;
 	}
-	len = len1 + len2 + 2;
-	new = malloc(len * sizeof(char));
-	if (new == NULL)
+	combined_len = l1 + l2 + 2;
+	new_string = malloc(combined_len * sizeof(char));
+	if (!new_string)
 		return (NULL);
-	for (i = 0; i < len1; i++)
-		new[i] = dest[i];
-	new[i] = '/';
-	for (j = 0; j < len2; j++)
-		new[i + 1 + j] = src[j];
-	new[len1 + len2 + 1] = '\0';
-	return (new);
+	/* copy the first string into the new array */
+	for (i = 0; i < l1; i++)
+		new_string[i] = dest[i];
+	new_string[i] = '/';
+	for (j = 0; j < l2; j++)
+		new_string[i + 1 + j] = src[j];
+	new_string[l1 + l2 + 1] = '\0';
+	return (new_string);
 }
 
 
 /**
  * _strlen - returns the length of a string
  * @s: string to be measured
- * Return: length of string
+ * Return: string length
  */
 unsigned int _strlen(char *s)
 {
-	unsigned int len;
+	unsigned int i;
 
-	len = 0;
+	i = 0;
 
-	for (len = 0; s[len]; len++)
+	for (i = 0; s[i]; i++)
 		;
-	return (len);
+	return (i);
 }
 
 /**
- * _strncmp - compares two strings
- * @s1: first string, of two, to be compared in length
- * @s2: second string, of two, to be compared
- * Return: 0 on success, anything else is a failure
+ * _strcmp - compares two strings
+ * @s1: first string
+ * @s2: second string
+ * Return: 0 on success, any other output is an error
  */
 int _strcmp(char *s1, char *s2)
 {
@@ -78,33 +79,34 @@ int _strcmp(char *s1, char *s2)
 }
 
 /**
- * _strdup - returns pointer to new mem alloc space which contains copy
- * @duplicate: string to be duplicated
- * Return: a pointer to the new duplicated string
+ * _strdup - creates a copy of a string
+ * @duplicate: target string
+ * Return: the replicated string
  */
 char *_strdup(char *duplicate)
 {
-	char *copy;
-	int len, i;
+	char *new;
+	int l = 0, i;
 
 	if (duplicate == 0)
 		return (NULL);
 
-	for (len = 0; duplicate[len]; len++)
+	for (; duplicate[l]; l++)
 		;
-	copy = malloc((len + 1) * sizeof(char));
+	/* '+1' for the null terminator */
+	new = malloc((l + 1) * sizeof(char));
 
-	for (i = 0; i <= len; i++)
-		copy[i] = duplicate[i];
+	for (i = 0; i <= l; i++)
+		new[i] = duplicate[i];
 
-	return (copy);
+	return (new);
 }
 
 /**
- * str_out - writes a string to standard output
- * @s: string to write
+ * str_out - writes to standard output
+ * @s: string to be written
  *
- * Return: number of chars printed or -1 on failure
+ * Return: length of chars printed or -1 on failure
  */
 ssize_t str_out(char *s)
 {
