@@ -46,7 +46,7 @@ int main(int argc, char **argv, char **environment)
 	if (!isatty(STDIN_FILENO))
 		interactive_mode = 1;
 	/* print "$" if not in interactive mode */
-	if (interactive == 0)
+	if (interactive_mode == 0)
 		str_out("$ ");
 
 	/* Processing user commands */
