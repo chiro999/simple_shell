@@ -24,7 +24,7 @@ char **custom_tokenizer(char *args, char *delim)
 		return (NULL);
 	}
 	/* tokenize using custom_strtok */
-	while ((tokens[i] = custom_strtok(arguments, delimiter)) != NULL)
+	while ((tokens[i] = custom_strtok(args, delim)) != NULL)
 	{
 		i++;
 		/* if token has matched the size of the array */

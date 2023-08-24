@@ -59,7 +59,7 @@ unsigned int is_a_match(char c, const char *str);
 char *custom_strtok(char *str, const char *delim);
 
 /* tokenizer function */
-char **custom_tokenizer(char *inputBuffer, char *delimiter);
+char **custom_tokenizer(char *args, char *delim);
 
 /* embedded functions */
 void curr_env(shell_t *shell_vars);
