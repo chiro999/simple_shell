@@ -87,7 +87,7 @@ char *_strdup(char *replica);
 char *int_to_string(unsigned int count);
 
 /* memory reallocation function */
-char **more_mem(char **old_arr, size_t *size);
+char **more_mem(char **old_arr, size_t *n);
 
 /* print error function */
 void print_error(shell_t *shell_vars, char *err_message);
