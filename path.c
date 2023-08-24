@@ -90,7 +90,7 @@ void path_check(shell_t *shell_vars)
 	{	
 		/* find PATH from env variables */
 		path = str_path(shell_vars->env_vars);
-		if (path != NULL)
+		if (path)
 		{
 			dup = _strdup(path + 5);
 			path_tokens = custom_tokenizer(dup, ":");
@@ -115,7 +115,7 @@ void path_check(shell_t *shell_vars)
 			}
 		}
 		/* if the command is not in any path- print error message */
-		if (path == NULL || path_tokens[i] == NULL)
+		if (!(path) || !(path_tokens[i]))
 		{
 			print_error(shell_vars, ": not found\n");
 			shell_vars->status = 127;

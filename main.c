@@ -20,7 +20,7 @@ void handle_signal(int handle_signal)
  *
  * Return: 0 or exit status, or ?
  */
-int main(int argc, char **argv, char **environment)
+int main(int argc, char **argv_arr, char **env_arr)
 {
 	size_t cmd_mem = 0;
 	unsigned int interactive_mode = 0;
@@ -37,9 +37,9 @@ int main(int argc, char **argv, char **environment)
 
 	UNUSED(argc);
 
-	shell_vars.argv = argv;
+	shell_vars.argv = argv_arr;
 	/* setting up environment variables */
-	shell_vars.env_vars = env_copy(environment);
+	shell_vars.env_vars = env_copy(env_arr);
 	signal(SIGINT, handle_signal);
 
 	/* check if the shell is running in interactive mode */
