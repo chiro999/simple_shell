@@ -96,7 +96,7 @@ void _setenv(shell_t *shell_vars)
  */
 void _unsetenv(shell_t *shell_vars)
 {
-	char **env, **new;
+	char **envvar, **new;
 
 	unsigned int i = 0;
         unsigned int j;
@@ -108,9 +108,9 @@ void _unsetenv(shell_t *shell_vars)
 		return;
 	}
 	/* find environment variable */
-	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
+	envvar = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
 	/* print error if env var is not found */
-	if (!env)
+	if (!envvar)
 	{
 		print_error(shell_vars, ": No variable to unset");
 		return;
@@ -127,12 +127,12 @@ void _unsetenv(shell_t *shell_vars)
 		shell_vars->status = 127;
 		_close(shell_vars);
 	}
-	for (i = 0; shell_vars->env_vars[i] != *env; i++)
+	for (i = 0; shell_vars->env_vars[i] != *envvar; i++)
 		new[i] = shell_vars->env_vars[i];
 	for (j = i + 1; shell_vars->env_vars[j] != NULL; j++, i++)
 		new[i] = shell_vars->env_vars[j];
 	new[i] = NULL;
-	free(*env);
+	free(*envvar);
 	free(shell_vars->env_vars);
 	shell_vars->env_vars = new;
 	shell_vars->status = 0;
