@@ -134,9 +134,9 @@ char **find_env(char **env, char *path)
 }
 
 /**
- * new_env - create a new environment variable string
- * @key: variable name
- * @value: variable value
+ * new_env -  new environment var string
+ * @key: env var name
+ * @value: env var value
  *
  * Return: pointer to the new string;
  */
