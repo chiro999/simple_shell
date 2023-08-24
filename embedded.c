@@ -127,10 +127,21 @@ void _unsetenv(shell_t *shell_vars)
 		shell_vars->status = 127;
 		_close(shell_vars);
 	}
-	for (i = 0; shell_vars->env_vars[i] != *envvar; i++)
-		new[i] = shell_vars->env_vars[i];
-	for (j = i + 1; shell_vars->env_vars[j] != NULL; j++, i++)
-		new[i] = shell_vars->env_vars[j];
+	    i = 0;
+	/* the real unset function */
+	while (shell_vars->env_vars[i] != *envvar)
+    	{
+        new[i] = shell_vars->env_vars[i];
+        i++;
+    	}
+
+    	j = i + 1;
+    	while (shell_vars->env_vars[j])
+    	{
+        new[i] = shell_vars->env_vars[j];
+        i++;
+        j++;
+    	}
 	new[i] = NULL;
 	free(*envvar);
 	free(shell_vars->env_vars);
