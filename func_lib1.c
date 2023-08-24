@@ -108,16 +108,17 @@ char *_strdup(char *duplicate)
  *
  * Return: length of chars printed or -1 on failure
  */
-ssize_t str_out(char *s)
+ssize_t str_out(char *string)
 {
-	ssize_t num, len;
+	ssize_t str_len;
+       	ssize_t	output;
 
-	num = _strlen(s);
-	len = write(STDOUT_FILENO, s, num);
-	if (len != num)
+	str_len = _strlen(s);
+	output = write(STDOUT_FILENO, string, str_len);
+	if (output != str_out)
 	{
 		perror("Fatal Error");
 		return (-1);
 	}
-	return (len);
+	return (output);
 }
