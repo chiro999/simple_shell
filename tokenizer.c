@@ -13,7 +13,7 @@ char **custom_tokenizer(char *args, char *delim)
 	size_t i = 0;
         size_t count = 10;
 
-	if (!arguments)
+	if (!args)
 		return (NULL);
 	/* malloc for tokens */
 	tokens = malloc(sizeof(char *) * count);
