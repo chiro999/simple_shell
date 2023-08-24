@@ -30,6 +30,7 @@ void _close(shell_t *shell_vars)
 		}
 		shell_vars->status = status;
 	}
+	/* free struct */
 	free(shell_vars->cmd_mem);
 	free(shell_vars->tokens);
 	free(shell_vars->commands);
