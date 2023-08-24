@@ -115,7 +115,7 @@ ssize_t str_out(char *string)
 
 	str_len = _strlen(string);
 	output = write(STDOUT_FILENO, string, str_len);
-	if (output != str_out)
+	if (output != str_len)
 	{
 		perror("Fatal Error");
 		return (-1);
