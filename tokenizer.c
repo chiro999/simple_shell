@@ -39,7 +39,7 @@ char **custom_tokenizer(char *args, char *delim)
 				return (NULL);
 			}
 		}
-		arguments = NULL;
+		args = NULL;
 	}
 	return (tokens);
 }
