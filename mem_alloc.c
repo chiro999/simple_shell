@@ -24,7 +24,7 @@ char **more_mem(char **old_arr, size_t *n)
 	{
 		new_arr[i] = old_arr[i];
 	}
-	*size += 10;
+	*n = *n + 10;
 	free(old_arr);
 	return (new_arr);
 }
