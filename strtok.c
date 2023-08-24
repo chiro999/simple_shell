@@ -7,13 +7,13 @@
  *
  * Return: 1 if identical else 0
  */
-unsigned int is_a_match(char c, const char *str)
+unsigned int is_a_match(char x, const char *str)
 {
 	unsigned int i = 0;
 
 	for (; str[i] != '\0'; i++)
 	{
-		if (c == str[i])
+		if (x == str[i])
 			return (1);
 	}
 	return (0);

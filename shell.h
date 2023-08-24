@@ -55,7 +55,7 @@ int is_PATH(char *name);
 void _close(shell_t *shell_vars);
 
 /* strtok functions */
-unsigned int is_a_match(char c, const char *str);
+unsigned int is_a_match(char x, const char *str);
 char *custom_strtok(char *str, const char *delim);
 
 /* tokenizer function */
