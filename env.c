@@ -6,26 +6,35 @@
  *
  * Return: new environment
  */
+
 char **env_copy(char **environ)
 {
-	char **new = NULL;
-	size_t i;
-	/* number of env variables */
-	for (i = 0; environ[i] != NULL; i++)
-		;
-	/* allocate memory + 1 for null terminator */
-	new = malloc(sizeof(char *) * (i + 1));
-	if (!new)
-	{
-		perror("Fatal Error");
-		exit(1);
-	}
-	/* replicate the env variables and store in new environment */
-	for (i = 0; environ[i] != NULL; i++)
-		new[i] = _strdup(environ[i]);
-	new[i] = NULL;
-	/* new environment */
-	return (new);
+    char **new = NULL;
+    size_t i = 0;
+
+    /* Count the number of environment variables */
+    while (environ[i])
+        i++;
+
+    /* Allocate memory for the new environment array (+1 for the null terminator) */
+    new = malloc(sizeof(char *) * (i + 1));
+    if (!new)
+    {
+        perror("Fatal Error");
+        exit(1);
+    }
+
+    i = 0;
+    /* Replicate each environment variable and store in the new environment array */
+    while (environ[i])
+    {
+        new[i] = _strdup(environ[i]);
+        i++;
+    }
+    new[i] = NULL;
+
+    /* Return the new environment array */
+    return new;
 }
 
 /**
@@ -51,25 +60,35 @@ void env_free(char **environ)
  */
 void env_plus(shell_t *shell_vars)
 {
-	unsigned int i;
+	unsigned int i = 0;
 	char **new;
 
-	/* count existing env vars */
-	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
-		;
-	/* malloc and +2 for new variable '/' */
+	/* Count existing env vars */
+	while (shell_vars->env_vars[i])
+	{
+		i++;
+	}
+
+	/* Malloc and +2 for new variable '/' */
 	new = malloc(sizeof(char *) * (i + 2));
-	/* print error and set error status */
+
+	/* Print error and set error status */
 	if (!new)
 	{
 		print_error(shell_vars, NULL);
 		shell_vars->status = 127;
 		_close(shell_vars);
 	}
-	/* copy env vars to new */
-	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
+
+	/* Copy env vars to new */
+	i = 0;
+	while (shell_vars->env_vars[i])
+	{
 		new[i] = shell_vars->env_vars[i];
-	/* create a new env var and store it in new */
+		i++;
+	}
+
+	/* Create a new env var and store it in new */
 	new[i] = new_env(shell_vars->tokens[1], shell_vars->tokens[2]);
 	if (!new[i])
 	{
@@ -81,7 +100,8 @@ void env_plus(shell_t *shell_vars)
 		free(new);
 		exit(127);
 	}
-	/* null terminate new env and update old env with new env */
+
+	/* Null terminate new env and update old env with new env */
 	new[i + 1] = NULL;
 	free(shell_vars->env_vars);
 	shell_vars->env_vars = new;
@@ -122,21 +142,31 @@ char **find_env(char **env, char *path)
  */
 char *new_env(char *key, char *value)
 {
-	unsigned int key_len, val_len, i, j;
+	unsigned int key_len, val_len, i = 0, j = 0;
 	char *new;
-
 
 	key_len = _strlen(key);
 	val_len = _strlen(value);
+
 	/* +2 for '=' and '/' */
 	new = malloc(sizeof(char) * (key_len + val_len + 2));
 	if (!new)
-		return (NULL);
-	for (i = 0; key[i] != '\0'; i++)
+		return NULL;
+
+	while (key[i] != '\0')
+	{
 		new[i] = key[i];
+		i++;
+	}
+	/* place '=' after key */
 	new[i] = '=';
-	for (j = 0; value[j] != '\0'; j++)
+
+	while (value[j] != '\0')
+	{
 		new[i + 1 + j] = value[j];
+		j++;
+	}
 	new[i + 1 + j] = '\0';
-	return (new);
+
+	return new;
 }
