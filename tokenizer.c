@@ -2,17 +2,18 @@
 
 /**
  * custom_tokenizer - tokenizes a buffer with a delimiter
- * @arguments: buffer to tokenize
- * @delimiter: delimiter to tokenize along
+ * @args: args to be tokenized
+ * @delim: char to be used as delimiter
  *
  * Return: pointer to an array of pointers to the tokens
  */
 char **custom_tokenizer(char *arguments, char *delimiter)
 {
 	char **tokens = NULL;
-	size_t i = 0, count = 10;
+	size_t i = 0;
+        size_t count = 10;
 
-	if (arguments == NULL)
+	if (!arguments)
 		return (NULL);
 	tokens = malloc(sizeof(char *) * count);
 	if (tokens == NULL)
