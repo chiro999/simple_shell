@@ -7,7 +7,7 @@
  *
  * Return: pointer to an array of pointers to the tokens
  */
-char **custom_tokenizer(char *arguments, char *delimiter)
+char **custom_tokenizer(char *args, char *delim)
 {
 	char **tokens = NULL;
 	size_t i = 0;
