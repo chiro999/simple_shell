@@ -7,13 +7,14 @@
  *
  * Return: void
  */
-void str_error(char *str)
+void str_error(char *string)
 {
-	ssize_t num, len;
+	ssize_t str_len;
+       	ssize_t	output;
 
-	num = _strlen(str);
-	len = write(STDERR_FILENO, str, num);
-	if (len != num)
+	str_len = _strlen(string);
+	output = write(STDERR_FILENO, string, str_len);
+	if (output != str_len)
 	{
 		perror("Fatal Error");
 		exit(1);
