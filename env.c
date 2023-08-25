@@ -1,41 +1,53 @@
 #include "shell.h"
 
 /**
- * env_copy - make the shell environment from the environment passed to main
- * @environ: environment passed to main
+ * env_copy - create shell env from the env passed to main
+ * @environ: env passed to main
  *
- * Return: pointer to the new environment
+ * Return: new environment
  */
+
 char **env_copy(char **environ)
 {
-	char **new = NULL;
-	size_t i;
+    char **new = NULL;
+    size_t i = 0;
 
-	for (i = 0; environ[i] != NULL; i++)
-		;
-	new = malloc(sizeof(char *) * (i + 1));
-	if (new == NULL)
-	{
-		perror("Fatal Error");
-		exit(1);
-	}
-	for (i = 0; environ[i] != NULL; i++)
-		new[i] = _strdup(environ[i]);
-	new[i] = NULL;
-	return (new);
+    /* Count the number of environment variables */
+    while (environ[i])
+        i++;
+
+    /* Allocate memory for the new environment array (+1 for the null terminator) */
+    new = malloc(sizeof(char *) * (i + 1));
+    if (!new)
+    {
+        perror("Fatal Error");
+        exit(1);
+    }
+
+    i = 0;
+    /* Replicate each environment variable and store in the new environment array */
+    while (environ[i])
+    {
+        new[i] = _strdup(environ[i]);
+        i++;
+    }
+    new[i] = NULL;
+
+    /* Return the new environment array */
+    return new;
 }
 
 /**
- * env_free - free the shell's environment
- * @environ: shell's environment
+ * env_free - free shell env
+ * @environ: shell env
  *
  * Return: void
  */
 void env_free(char **environ)
 {
-	unsigned int i;
+	unsigned int i = 0;
 
-	for (i = 0; environ[i] != NULL; i++)
+	for (; environ[i] != NULL; i++)
 		free(environ[i]);
 	free(environ);
 }
@@ -48,22 +60,37 @@ void env_free(char **environ)
  */
 void env_plus(shell_t *shell_vars)
 {
-	unsigned int i;
+	unsigned int i = 0;
 	char **new;
 
-	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
-		;
+	/* Count existing env vars */
+	while (shell_vars->env_vars[i])
+	{
+		i++;
+	}
+
+	/* Malloc and +2 for new variable '/' */
 	new = malloc(sizeof(char *) * (i + 2));
-	if (new == NULL)
+
+	/* Print error and set error status */
+	if (!new)
 	{
 		print_error(shell_vars, NULL);
 		shell_vars->status = 127;
 		_close(shell_vars);
 	}
-	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
+
+	/* Copy env vars to new */
+	i = 0;
+	while (shell_vars->env_vars[i])
+	{
 		new[i] = shell_vars->env_vars[i];
+		i++;
+	}
+
+	/* Create a new env var and store it in new */
 	new[i] = new_env(shell_vars->tokens[1], shell_vars->tokens[2]);
-	if (new[i] == NULL)
+	if (!new[i])
 	{
 		print_error(shell_vars, NULL);
 		free(shell_vars->cmd_mem);
@@ -73,57 +100,73 @@ void env_plus(shell_t *shell_vars)
 		free(new);
 		exit(127);
 	}
+
+	/* Null terminate new env and update old env with new env */
 	new[i + 1] = NULL;
 	free(shell_vars->env_vars);
 	shell_vars->env_vars = new;
 }
 
 /**
- * find_env - finds an environment variable
- * @env: array of environment variables
- * @path: environment variable to find
+ * find_env - finds an env variable
+ * @env: array of env variables
+ * @path: specific env variable
  *
  * Return: pointer to address of the environment variable
  */
 char **find_env(char **env, char *path)
 {
-	unsigned int i, j, len;
+	unsigned int i = 0, j, path_len;
 
-	len = _strlen(path);
-	for (i = 0; env[i] != NULL; i++)
-	{
-		for (j = 0; j < len; j++)
+	path_len = _strlen(path);
+	for (; env[i] != NULL; i++)
+	{	/* compare curr_env with target env */
+		for (j = 0; j < path_len; j++)
 			if (path[j] != env[i][j])
 				break;
-		if (j == len && env[i][j] == '=')
+		/* if they match in length and the next char after name is '=' */
+		if (j == path_len && env[i][j] == '=')
+			/* return env variable */
 			return (&env[i]);
 	}
+	/* null env var if not found */
 	return (NULL);
 }
 
 /**
- * new_env - create a new environment variable string
- * @key: variable name
- * @value: variable value
+ * new_env -  new environment var string
+ * @key: env var name
+ * @value: env var value
  *
  * Return: pointer to the new string;
  */
 char *new_env(char *key, char *value)
 {
-	unsigned int len1, len2, i, j;
+	unsigned int key_len, val_len, i = 0, j = 0;
 	char *new;
 
+	key_len = _strlen(key);
+	val_len = _strlen(value);
 
-	len1 = _strlen(key);
-	len2 = _strlen(value);
-	new = malloc(sizeof(char) * (len1 + len2 + 2));
-	if (new == NULL)
-		return (NULL);
-	for (i = 0; key[i] != '\0'; i++)
+	/* +2 for '=' and '/' */
+	new = malloc(sizeof(char) * (key_len + val_len + 2));
+	if (!new)
+		return NULL;
+
+	while (key[i] != '\0')
+	{
 		new[i] = key[i];
+		i++;
+	}
+	/* place '=' after key */
 	new[i] = '=';
-	for (j = 0; value[j] != '\0'; j++)
+
+	while (value[j] != '\0')
+	{
 		new[i + 1 + j] = value[j];
+		j++;
+	}
 	new[i + 1 + j] = '\0';
-	return (new);
+
+	return new;
 }

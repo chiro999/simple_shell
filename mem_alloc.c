@@ -1,28 +1,30 @@
 #include "shell.h"
 
 /**
- * more_mem - reallocates a pointer to double the space
- * @ptr: pointer to the old array
- * @size: pointer to number of elements in the old array
+ * more_mem - doubles or increases the memory space
+ * @old_arr: old array
+ * @n: number of elements in old_array
  *
  * Return: pointer to the new array
  */
-char **more_mem(char **old_arr, size_t *size)
+char **more_mem(char **old_arr, size_t *n)
 {
-	char **new;
-	size_t i;
+	char **new_arr;
+	size_t i = 0;
 
-	new = malloc(sizeof(char *) * ((*size) + 10));
-	if (new == NULL)
+	/* new array with increased memory */
+	new_arr = malloc(sizeof(char *) * ((*n) + 10));
+	if (!new_arr)
 	{
 		free(old_arr);
 		return (NULL);
 	}
-	for (i = 0; i < (*size); i++)
+	/* transfer elements from old arr to new arr iteratively */
+	for (; i < (*n); i++)
 	{
-		new[i] = old_arr[i];
+		new_arr[i] = old_arr[i];
 	}
-	*size += 10;
+	*n = *n + 10;
 	free(old_arr);
-	return (new);
+	return (new_arr);
 }

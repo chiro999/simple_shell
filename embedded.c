@@ -1,42 +1,43 @@
 #include "shell.h"
 
 /**
- * _embedded - checks if the command is a builtin
- * @inputs: variables
- * Return: pointer to the function or NULL
+ * _embedded - checks if the command is an embedded function
+ * @shell_vars: variables
+ * Return: the function or NULL
  */
 void (*_embedded(shell_t *shell_vars))(shell_t *shell_vars)
 {
-	unsigned int i;
-	embedded_t check[] = {
+	unsigned int i = 0;
+	embedded_t selector[] = {
 		{"exit", _close},
 		{"env", curr_env},
 		{"setenv", _setenv},
 		{"unsetenv", _unsetenv},
 		{NULL, NULL}
 	};
-
-	for (i = 0; check[i].f != NULL; i++)
-	{
-		if (_strcmp(shell_vars->tokens[0], check[i].name) == 0)
+	
+	/* function selector, compares input command with the commands above  */
+	for (; selector[i].f != NULL; i++)
+	{	
+		if (_strcmp(shell_vars->tokens[0], selector[i].name) == 0)
 			break;
 	}
-	if (check[i].f != NULL)
-		check[i].f(shell_vars);
-	return (check[i].f);
+	if (selector[i].f)
+		selector[i].f(shell_vars);
+	return (selector[i].f);
 }
 
 
 /**
  * curr_env - prints the current environment
- * @inputs: struct of variables
+ * @shell_vars:  variables
  * Return: void.
  */
 void curr_env(shell_t *shell_vars)
 {
-	unsigned int i;
+	unsigned int i = 0;
 
-	for (i = 0; shell_vars->env_vars[i]; i++)
+	for (; shell_vars->env_vars[i]; i++)
 	{
 		str_out(shell_vars->env_vars[i]);
 		str_out("\n");
@@ -45,29 +46,34 @@ void curr_env(shell_t *shell_vars)
 }
 
 /**
- * _setenv - create a new environment variable, or edit an existing variable
- * @inputs: pointer to struct of variables
+ * _setenv - create or environment variables
+ * @shell_vars: struct of variables
  *
  * Return: void
  */
 void _setenv(shell_t *shell_vars)
 {
-	char **env;
+	char **envvar;
 	char *input;
-
-	if (shell_vars->tokens[1] == NULL || shell_vars->tokens[2] == NULL)
+	
+	/* correct number of args */
+	if (!(shell_vars->tokens[1]) || !(shell_vars->tokens[2]))
 	{
 		print_error(shell_vars, ": Incorrect number of arguments\n");
 		shell_vars->status = 2;
 		return;
 	}
-	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
-	if (env == NULL)
+	/* find the correct env var */
+	envvar = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
+	/* add it if it does not exist */
+	if (!envvar)
 		env_plus(shell_vars);
 	else
 	{
+		/* create new env var string */
 		input = new_env(shell_vars->tokens[1], shell_vars->tokens[2]);
-		if (input == NULL)
+		/* exit program if unsuccessful */
+		if (!input)
 		{
 			print_error(shell_vars, NULL);
 			free(shell_vars->cmd_mem);
@@ -76,51 +82,68 @@ void _setenv(shell_t *shell_vars)
 			env_free(shell_vars->env_vars);
 			exit(127);
 		}
-		free(*env);
-		*env = input;
+		free(*envvar);
+		*envvar = input;
 	}
 	shell_vars->status = 0;
 }
 
 /**
- * _unsetenv - remove an environment variable
- * @inputs: pointer to a struct of variables
+ * _unsetenv - removes an environment variable
+ * @shell_vars:  struct of variables
  *
  * Return: void
  */
 void _unsetenv(shell_t *shell_vars)
 {
-	char **env, **new;
+	char **envvar, **new;
 
-	unsigned int i, j;
-
-	if (shell_vars->tokens[1] == NULL)
+	unsigned int i = 0;
+        unsigned int j;
+	/* coorect number of args? */
+	if (!(shell_vars->tokens[1]))
 	{
 		print_error(shell_vars, ": Incorrect number of arguments\n");
 		shell_vars->status = 2;
 		return;
 	}
-	env = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
-	if (env == NULL)
+	/* find environment variable */
+	envvar = find_env(shell_vars->env_vars, shell_vars->tokens[1]);
+	/* print error if env var is not found */
+	if (!envvar)
 	{
 		print_error(shell_vars, ": No variable to unset");
 		return;
 	}
-	for (i = 0; shell_vars->env_vars[i] != NULL; i++)
+	/* count env_vars */
+	for (; shell_vars->env_vars[i] != NULL; i++)
 		;
+	/* allocate memory the size of the env_vars */
 	new = malloc(sizeof(char *) * i);
-	if (new == NULL)
+	/* close program if malloc fails */
+	if (!new)
 	{
 		print_error(shell_vars, NULL);
 		shell_vars->status = 127;
 		_close(shell_vars);
 	}
-	for (i = 0; shell_vars->env_vars[i] != *env; i++)
-		new[i] = shell_vars->env_vars[i];
-	for (j = i + 1; shell_vars->env_vars[j] != NULL; j++, i++)
-		new[i] = shell_vars->env_vars[j];
+	    i = 0;
+	/* the real unset function */
+	while (shell_vars->env_vars[i] != *envvar)
+    	{
+        new[i] = shell_vars->env_vars[i];
+        i++;
+    	}
+
+    	j = i + 1;
+    	while (shell_vars->env_vars[j])
+    	{
+        new[i] = shell_vars->env_vars[j];
+        i++;
+        j++;
+    	}
 	new[i] = NULL;
-	free(*env);
+	free(*envvar);
 	free(shell_vars->env_vars);
 	shell_vars->env_vars = new;
 	shell_vars->status = 0;

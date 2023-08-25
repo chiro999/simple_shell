@@ -55,11 +55,11 @@ int is_PATH(char *name);
 void _close(shell_t *shell_vars);
 
 /* strtok functions */
-unsigned int is_a_match(char c, const char *str);
+unsigned int is_a_match(char x, const char *str);
 char *custom_strtok(char *str, const char *delim);
 
 /* tokenizer function */
-char **custom_tokenizer(char *inputBuffer, char *delimiter);
+char **custom_tokenizer(char *args, char *delim);
 
 /* embedded functions */
 void curr_env(shell_t *shell_vars);
@@ -79,21 +79,21 @@ char *_strcat(char *dest, char *src);
 int _strcmp(char *s1, char *s2);
 int _atoi(char *s);
 
-ssize_t str_out(char *str);
+ssize_t str_out(char *string);
 unsigned int _strlen(char *s);
-void str_error(char *str);
+void str_error(char *string);
 
 char *_strdup(char *replica);
 char *int_to_string(unsigned int count);
 
 /* memory reallocation function */
-char **more_mem(char **old_arr, size_t *size);
+char **more_mem(char **old_arr, size_t *n);
 
 /* print error function */
 void print_error(shell_t *shell_vars, char *err_message);
 
 /* main functions */
 void handle_signal(int handle_signal);
-int main(int argc, char **argv, char **environment);
+int main(int argc, char **argv_arr, char **env_arr);
 
 #endif
